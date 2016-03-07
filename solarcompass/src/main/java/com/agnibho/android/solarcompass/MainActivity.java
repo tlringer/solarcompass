@@ -25,16 +25,17 @@
 
 package com.agnibho.android.solarcompass;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,10 +46,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.acg.lib.ACGResourceAccessException;
+import com.acg.lib.impl.LocationACG;
+import com.acg.lib.listeners.ACGActivity;
+import com.acg.lib.listeners.ACGListeners;
+import com.acg.lib.listeners.ResourceAvailabilityListener;
+import com.acg.lib.model.Location;
 
 import java.util.Calendar;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ACGActivity {
+
+    private LocationACG locationACG;
 
     private LocationData locationData=LocationData.getInstance();
     private float[] center=new float[2];
@@ -65,19 +74,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Android 23 compatibility (TODO move to lib)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+
+        locationACG = (LocationACG) getFragmentManager().findFragmentById(R.id.location_acg_fragment_id);
+
         if(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)<6 || Calendar.getInstance().get(Calendar.HOUR_OF_DAY)>18){
             nightAlert();
         }
 
         displayLoc=(TextView)findViewById(R.id.textView4);
-
-        gpsLocation();
-        if(locationData.isAvailable()) {
-            displayLocation();
-        }
-        else{
-            startActivity(new Intent(MainActivity.this, LocationActivity.class));
-        }
 
         /**
          * LocationData Button
@@ -167,18 +175,10 @@ public class MainActivity extends Activity {
     }
 
     private void gpsLocation(){
-        LocationManager locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
         try {
-            Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(loc==null){
-                loc=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            }
+            Location loc = locationACG.getResource();
             locationData.setCoordinate(loc.getLatitude(), loc.getLongitude());
-        }
-        catch (SecurityException e){
-            Toast.makeText(getApplicationContext(), "GPS Permission denied.", Toast.LENGTH_LONG).show();
-        }
-        catch (Exception e){
+        } catch (ACGResourceAccessException e) {
             Toast.makeText(getApplicationContext(), "GPS location unavailable.", Toast.LENGTH_LONG).show();
         }
     }
@@ -228,5 +228,26 @@ public class MainActivity extends Activity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public ACGListeners buildACGListeners() {
+        return new ACGListeners.Builder().withResourceReadyListener(locationACG, new ResourceAvailabilityListener() {
+            @Override
+            public void onResourceUnavailable() {
+                Toast.makeText(getApplicationContext(), "GPS is off.", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onResourceReady() {
+                gpsLocation();
+                if(locationData.isAvailable()) {
+                    displayLocation();
+                }
+                else{
+                    startActivity(new Intent(MainActivity.this, LocationActivity.class));
+                }
+            }
+        }).build();
     }
 }
