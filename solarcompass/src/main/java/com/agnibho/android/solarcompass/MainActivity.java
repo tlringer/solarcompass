@@ -25,17 +25,13 @@
 
 package com.agnibho.android.solarcompass;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,11 +69,6 @@ public class MainActivity extends Activity implements ACGActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Android 23 compatibility (TODO move to lib)
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
 
         locationACG = (LocationACG) getFragmentManager().findFragmentById(R.id.location_acg_fragment_id);
 
