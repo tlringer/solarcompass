@@ -170,7 +170,7 @@ public class MainActivity extends Activity implements ACGActivity {
             Location loc = locationACG.getResource();
             locationData.setCoordinate(loc.getLatitude(), loc.getLongitude());
         } catch (ACGResourceAccessException e) {
-            Toast.makeText(getApplicationContext(), "GPS location unavailable.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "GPS Permission denied.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -226,7 +226,7 @@ public class MainActivity extends Activity implements ACGActivity {
         return new ACGListeners.Builder().withResourceReadyListener(locationACG, new ResourceAvailabilityListener() {
             @Override
             public void onResourceUnavailable() {
-                Toast.makeText(getApplicationContext(), "GPS is off.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "GPS location unavailable.", Toast.LENGTH_LONG).show();
             }
 
             @Override
