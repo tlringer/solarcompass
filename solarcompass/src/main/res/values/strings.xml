@@ -19,4 +19,7 @@
         \nCopyright \u00A9 2016 Agnibho Mondal
         \n<a href='http://www.agnibho.com'>www.agnibho.com</a>
     </string>
+    <string name="locationtext">Turn Location On</string>
+    <string name="locationontext">Turn Location Off</string>
+    <string name="locationofftext">Turn Location On</string>
 </resources>

@@ -41,10 +41,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.Calendar;
 
@@ -71,13 +68,25 @@ public class MainActivity extends Activity {
 
         displayLoc=(TextView)findViewById(R.id.textView4);
 
-        gpsLocation();
-        if(locationData.isAvailable()) {
-            displayLocation();
-        }
-        else{
-            startActivity(new Intent(MainActivity.this, LocationActivity.class));
-        }
+        // Add a location button that uses their location method and not an ACG, so we can test latency
+        ToggleButton locationButton = (ToggleButton) findViewById(R.id.locationButton);
+
+        locationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    gpsLocation();
+                    if(locationData.isAvailable()) {
+                        displayLocation();
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, LocationActivity.class));
+                    }
+                } else {
+                   //
+                }
+            }
+        });
 
         /**
          * LocationData Button

@@ -35,10 +35,21 @@
 
     </LinearLayout>
 
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/locationtext"
+        android:textOn="@string/locationontext"
+        android:textOff="@string/locationofftext"
+        android:id="@+id/locationButton"
+        android:textColor="#FFFFFF"
+        android:background="#000000"
+        android:layout_below="@+id/linearLayout"/>
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/locationButton"
         android:id="@+id/frameLayout">
 
         <ImageView
