@@ -1,5 +1,6 @@
 # Flow policy
 ACG("location") -> DISPLAY
+USER_INPUT -> DISPLAY
 
 
 

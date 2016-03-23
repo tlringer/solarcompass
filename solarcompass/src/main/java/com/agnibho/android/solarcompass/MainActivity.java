@@ -48,8 +48,11 @@ import com.acg.lib.listeners.ACGActivity;
 import com.acg.lib.listeners.ACGListeners;
 import com.acg.lib.listeners.ResourceAvailabilityListener;
 import com.acg.lib.model.Location;
+import sparta.checkers.quals.Sink;
 
 import java.util.Calendar;
+
+import static sparta.checkers.quals.FlowPermissionString.DISPLAY;
 
 public class MainActivity extends Activity implements ACGActivity {
 
@@ -57,6 +60,7 @@ public class MainActivity extends Activity implements ACGActivity {
 
     private LocationData locationData=LocationData.getInstance();
     private float[] center=new float[2];
+    @Sink(DISPLAY)
     private float currCompass=0;
 
     private TextView displayLoc;
@@ -156,7 +160,7 @@ public class MainActivity extends Activity implements ACGActivity {
         displayLocation();
     }
 
-    private double getAngle(float x, float y) {
+    private @Sink(DISPLAY) double getAngle(@Sink(DISPLAY) float x, @Sink(DISPLAY) float y) {
         double angle;
         x=x-center[0];
         y=center[1]-y;

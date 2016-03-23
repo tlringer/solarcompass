@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 repositories {
@@ -41,8 +45,10 @@ dependencies {
     if (runSparta) {
         // checkerframework
         compile fileTree(dir: checkerFrameworkDir, include: ['*.jar'])
-        compile fileTree(dir: spartaDir, include: ['*.jar']) // move if you need annotations
     }
+
+    // sparta
+    compile fileTree(dir: spartaDir, include: ['*.jar'])
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile group: 'com.google.guava', name: 'guava', version: '18.0'

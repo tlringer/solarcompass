@@ -1,3 +1,4 @@
 # Summary of flows found by the Information Flow Checker
  ACG("location") -> DISPLAY 
+ USER_INPUT -> DISPLAY 
 

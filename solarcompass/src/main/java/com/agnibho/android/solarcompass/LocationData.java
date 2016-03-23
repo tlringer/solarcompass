@@ -25,6 +25,10 @@
 
 package com.agnibho.android.solarcompass;
 
+import sparta.checkers.quals.Sink;
+
+import static sparta.checkers.quals.FlowPermissionString.DISPLAY;
+
 public class LocationData {
     private static LocationData ourInstance = new LocationData();
 
@@ -35,19 +39,19 @@ public class LocationData {
     private LocationData() {
     }
 
-    private double latitude;
-    private double longitude;
+    @Sink(DISPLAY) private double latitude;
+    @Sink(DISPLAY) private double longitude;
     private boolean available=false;
 
-    protected void setCoordinate(double lat, double lon){
+    protected void setCoordinate(@Sink(DISPLAY) double lat, @Sink(DISPLAY) double lon){
         latitude=lat;
         longitude=lon;
         available=true;
     }
-    protected double getLatitude(){
+    protected @Sink(DISPLAY) double getLatitude(){
         return latitude;
     }
-    protected double getLongitude(){
+    protected @Sink(DISPLAY) double getLongitude(){
         return longitude;
     }
     protected boolean isAvailable() { return available; }

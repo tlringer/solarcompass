@@ -25,8 +25,12 @@
 
 package com.agnibho.android.solarcompass;
 
+import sparta.checkers.quals.Sink;
+
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import static sparta.checkers.quals.FlowPermissionString.DISPLAY;
 
 public class CompassLogic {
 
@@ -34,7 +38,7 @@ public class CompassLogic {
     Find Compass Angle
     Unit - Degrees
     */
-    public static double getAngle(){
+    public static @Sink(DISPLAY) double getAngle(){
         return Math.toDegrees(getAzimuthAngle());
     }
 
@@ -51,7 +55,7 @@ public class CompassLogic {
     Hour Angle
     Unit - Degrees
      */
-    private static double getHourAngle(){
+    private static @Sink(DISPLAY) double getHourAngle(){
         Calendar cal=Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         double utc=(double)cal.get(Calendar.HOUR_OF_DAY)+(double)cal.get(Calendar.MINUTE)/60;
@@ -64,7 +68,7 @@ public class CompassLogic {
     Altitude Angle
     Unit - Radians
      */
-    private static double getAltitudeAngle(){
+    private static @Sink(DISPLAY) double getAltitudeAngle(){
         double latitude=Math.toRadians(LocationData.getInstance().getLatitude());
         double declination=Math.toRadians(getDeclinationAngle());
         double hourAngle=Math.toRadians(getHourAngle());
@@ -76,7 +80,7 @@ public class CompassLogic {
     Azimuth Angle
     Unit - Radians
      */
-    private static double getAzimuthAngle(){
+    private static @Sink(DISPLAY) double getAzimuthAngle(){
         double latitude=Math.toRadians(LocationData.getInstance().getLatitude());
         double declination=Math.toRadians(getDeclinationAngle());
         double altitude=getAltitudeAngle();
